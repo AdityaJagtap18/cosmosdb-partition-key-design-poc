@@ -1,0 +1,77 @@
+{
+  "mode": "live",
+  "n_cases_measured": 400,
+  "partition_key": {
+    "chosen": "case_id",
+    "rejected": {
+      "applicant_id": {
+        "monthly_ru": 655325,
+        "vs_chosen": 1.1
+      },
+      "status": {
+        "monthly_ru": 655325,
+        "vs_chosen": 1.1
+      }
+    },
+    "why": "highest cardinality, evenest distribution, and it makes the 40,000/month pattern a point read"
+  },
+  "measured_ru_per_pattern": {
+    "case_id": {
+      "get_by_case_id": 1.14,
+      "list_by_applicant": 3.09,
+      "filter_by_status": 24.54
+    },
+    "applicant_id": {
+      "get_by_case_id": 2.87,
+      "list_by_applicant": 3.09,
+      "filter_by_status": 24.54
+    },
+    "status": {
+      "get_by_case_id": 2.87,
+      "list_by_applicant": 3.09,
+      "filter_by_status": 24.54
+    }
+  },
+  "partition_skew": {
+    "case_id": {
+      "logical_partitions": 400,
+      "largest_share": 0.003
+    },
+    "applicant_id": {
+      "logical_partitions": 125,
+      "largest_share": 0.028
+    },
+    "status": {
+      "logical_partitions": 5,
+      "largest_share": 0.725
+    }
+  },
+  "document_shape": {
+    "fat": {
+      "kb": 2.98,
+      "ru_per_update": 14.1
+    },
+    "hot_split": {
+      "kb": 0.19,
+      "ru_per_update": 10.67
+    }
+  },
+  "change_feed": {
+    "mode": "latest_version",
+    "transitions": 120,
+    "observed": 30,
+    "lost_pct": 0.75,
+    "mitigation": "append-only transition record",
+    "transition_ru_each": 7.38
+  },
+  "throughput": {
+    "poc": "serverless",
+    "monthly_ru": 586125,
+    "provisioned_floor_ru_s": 400
+  },
+  "review_triggers": [
+    "a new access pattern",
+    "volume beyond the tested range",
+    "partition skew rising"
+  ]
+}
